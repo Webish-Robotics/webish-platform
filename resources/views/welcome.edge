@@ -1,0 +1,17 @@
+@layout('layout/app')
+
+@section('content')
+<section class="section-main d-flex align-items-center">
+  <div class="container text-center">
+    <p class="text-white">
+      <span class="badge rounded-pill bg-orange">New</span>
+      <small class="text-snow">Ready to be a little <strong class="text-orange">magician</strong> and make awesome projects?</small>
+    </p>
+    <h3 class="text-orange"><strong>Webish <i class="fas fa-cogs"></i></strong></h3>
+    <h6 class="text-white">Robot programming platform with sockets in order to use remotely.</h6>
+    @unless(auth.isLoggedIn)
+      <a class="mt-2 btn btn-cyan text-snow" href="{{ route('auth.show.login') }}">Login into your account</a>
+    @endunless
+  </div>
+</section>
+@endsection

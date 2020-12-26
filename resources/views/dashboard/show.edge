@@ -1,0 +1,7 @@
+@layout('layout/app')
+
+@section('content')
+<div id="app" class="g-0">
+  <div id="project-component" data-team="{{ JSON.stringify(team[0].teams[0]) }}" data-project="{{ JSON.stringify(project) }}" data-user="{{ JSON.stringify(auth.user) }}"></div>
+</div>
+@endsection

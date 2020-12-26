@@ -1,0 +1,136 @@
+@layout('layout/app')
+
+@section('content')
+<div class="min-vh-100 d-flex align-items-center my-5">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 col-lg-6">
+        <h5 class="text-fogra">Add a new school</h5>
+        <p class="text-black">Here you can add a new school to the platform acording to your details.</p>
+      </div>
+      <div class="col-md-12 col-lg-6">
+        @if(flashMessages.has('error'))
+        <div class="alert alert-orange alert-dismissible" role="alert">
+          {{ flashMessages.get('error') }}
+          <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+        @if(flashMessages.has('success'))
+        <div class="alert alert-cyan alert-dismissible" role="alert">
+          {{ flashMessages.get('success') }}
+          <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+        <div class="card shadow-lg">
+          <form method="POST" action="{{ route('schools.store') }}">
+            <div class="card-body">
+              {{ csrfField() }}
+              <div class="mb-3">
+                <label for="name" class="form-label">Name of the school <strong class="text-orange">*</strong></label>
+                <input id="name" type="text" class="form-control" name="name" placeholder="Enter your name..." required />
+
+                @if (flashMessages.has('errors.name'))
+                <span class="text-cyan">
+                  {{ flashMessages.get('errors.name') }}
+                </span>
+                @endif
+              </div>
+              <div class="mb-3">
+                <label for="address" class="form-label">School's address <strong class="text-orange">*</strong></label>
+                <input id="address" type="text" class="form-control" name="address" placeholder="Enter your address..." />
+
+                @if (flashMessages.has('errors.address'))
+                <span class="text-cyan">
+                  {{ flashMessages.get('errors.address') }}
+                </span>
+                @endif
+              </div>
+              <div class="mb-3">
+                <label for="contact" class="form-label">School's email <strong class="text-orange">*</strong></label>
+                <input id="contact" type="text" class="form-control" name="contact" placeholder="Enter your email..." />
+
+                @if (flashMessages.has('errors.contact'))
+                <span class="text-cyan">
+                  {{ flashMessages.get('errors.contact') }}
+                </span>
+                @endif
+              </div>
+              <div class="mb-3">
+                <label for="phone" class="form-label">School's phone number <strong class="text-orange">*</strong></label>
+                <input id="phone" type="text" class="form-control" name="phone" placeholder="Enter your phone..." />
+
+                @if (flashMessages.has('errors.phone'))
+                <span class="text-cyan">
+                  {{ flashMessages.get('errors.phone') }}
+                </span>
+                @endif
+              </div>
+            </div>
+
+            <div class="card-footer">
+              <button type="submit" class="btn btn-cyan">Add</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <hr class="my-5" />
+
+    <div class="row">
+      <div class="col-md-12 col-lg-6">
+        <h5 class="text-fogra">See the list of schools</h5>
+        <p class="text-black">Here you can see a list of the schools integrated in the platform.</p>
+
+        <div class="text-center my-1">
+          @if(flashMessages.has('errormsg'))
+          <div class="alert alert-orange alert-dismissible" role="alert">
+            {{ flashMessages.get('errormsg') }}
+            <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+          </div>
+          @endif
+          @if(flashMessages.has('message'))
+          <div class="alert alert-cyan alert-dismissible" role="alert">
+            {{ flashMessages.get('message') }}
+            <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+          </div>
+          @endif
+        </div>
+      </div>
+
+      <div class="col-md-12 col-lg-6">
+        @each(school in schools.rows)
+        <div class="card shadow-lg my-1">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div class="text-orange">
+              {{ school.name }}
+              <br/>
+              <small class="text-muted">{{ JSON.parse(school.details).contact }}</small>
+            </div>
+            <div>
+              <form action="{{ `/schools/${school.id}?_method=DELETE` }}" method="POST" class="d-inline-flex mx-1">
+                {{ csrfField() }}
+
+                <button type="submit" class="btn btn-cyan">Delete</button>
+              </form>
+              <a class="text-fogra text-decoration-none mx-1" href="{{ route('schools.show', { params: { id: school.id }}) }}">
+                Edit <i class="fas fa-edit"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        @endeach
+        @if (schools.lastPage != 1)
+          <div class="text-center">
+            @each(anchor in schools.getUrlsForRange(1, schools.lastPage))
+            <a class="btn btn-outline-cyan mx-1" href="{{ anchor.url }}">
+              {{ anchor.page }}
+            </a>
+            @endeach
+          </div>
+        @endif
+      </div>
+    </div>
+  </div>
+</div>
+@endsection

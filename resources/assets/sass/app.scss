@@ -1,0 +1,103 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+// Variables
+$body-bg: #fff;
+
+// Typography
+$font-family-sans-serif: 'PT Sans', sans-serif;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+
+// Colors
+$theme-colors: (
+  "orange": #ff8811,
+  "cyan": #087e8b,
+  "success": #5d8806,
+
+  "snow": #FBF5F3,
+  "fogra": #010B14,
+  "black": #011627,
+);
+$fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+
+//BDF
+/* width */
+::-webkit-scrollbar {
+  width: 0.5em !important;
+  scroll-behavior: smooth !important;
+}
+
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #999 !important;
+  outline: 1px solid slategrey !important;
+  border-radius: 10px !important;
+
+  &:hover {
+    background-color: #bbb !important;
+  }
+}
+
+// Mixins
+@mixin format-section($height, $width, $is-linear, $background) {
+  min-height: $height;
+  min-width: $width;
+
+  @if $is-linear {
+    background: linear-gradient(0deg, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .5) 100%), $background no-repeat center;
+  } @else {
+    background: $background no-repeat center;
+  }
+  background-size: cover;
+}
+
+.footer {
+  @include format-section(35vh, 100%, false, #011627);
+}
+
+.section-main {
+  @include format-section(100vh, 100%, true, url('./../background-ev3.jpg'));
+}
+
+.login-section {
+  min-height: 100vh;
+  background: linear-gradient(0deg, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .5) 100%), url('./../background-ev3.jpg') no-repeat center;
+  background-size: cover;
+}
+.form-section {
+  min-height: 100vh;
+}
+
+.form-control {
+  border-radius: 0;
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+.alert-orange {
+  background: #010B14;
+  text-color: #ff8811;
+}
+
+.card {
+  border: none;
+  .card-footer {
+    border: none;
+  }
+}
+
+.menu-height {
+  min-height: 5vh;
+}

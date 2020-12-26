@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrfToken }}">
+  <meta name="keywords" content="robotics, online, programming, ev3">
+  <meta name="description" content="Webish Platform is a visual programming IDE for kids to learn how to program an EV3 Lego Robot.">
+  <title>Webish Platform</title>
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="">
+  <meta property="og:title" content="Webish">
+  <meta property="og:description" content="Visual programming IDE for kids to learn how to program an EV3 Lego Robot.">
+  <meta property="og:image" content="">
+
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="">
+  <meta property="twitter:title" content="Webish">
+  <meta property="twitter:description" content="visual programming IDE for kids to learn how to program an EV3 Lego Robot.">
+  <meta property="twitter:image" content="">
+
+  <script src="{{ mix('js/app.js') }}" defer></script>
+
+  <link rel="dns-prefetch" href="//fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+</head>
+<body>
+  @include('components/navbar')
+
+  @!section('content')
+
+  @include('components/footer')
+</body>
+</html>

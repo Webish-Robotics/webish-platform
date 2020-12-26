@@ -1,0 +1,81 @@
+@layout('layout/app')
+
+@section('content')
+<div class="row g-0">
+  <div class="col-md-12 col-lg-7 login-section d-none d-lg-block">
+    <div class="h-100 d-flex flex-column justify-content-between">
+      <div class="container my-4 d-flex flex-row justify-content-between"></div>
+      <div class="container my-4 text-center">
+        <small class="text-white-50">Be aware of your account data, we are not responsible for lost accounts!</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 col-lg-5 form-section">
+    <div class="h-100 d-flex align-items-center my-5">
+      <div class="container-fluid px-5 py-5">
+        @if(flashMessages.has('error'))
+        <div class="alert alert-orange alert-dismissible" role="alert">
+          {{ flashMessages.get('error') }}
+          <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+        <div class="mb-5 text-center">
+          <h5 class="text-orange">
+            <strong>Webish Login<i class="fas fa-cogs"></i></strong>
+          </h5>
+        </div>
+
+        <form class="mb-1" method="POST" action="{{ route('auth.login') }}">
+          {{ csrfField() }}
+
+          <div class="mb-3">
+            <label for="username" class="text-md-left">Username</label>
+            <input id="username" type="text" class="form-control" name="username" placeholder="Enter your username..." required autocomplete="username" autofocus>
+            @if(flashMessages.has('errors.username'))
+              <span class="text-cyan">
+                {{ flashMessages.get('errors.username') }}
+              </span>
+            @endif
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="text-md-left">
+              Password
+              <a href="" class="font-weight-lighter text-decoration-none">
+                <small>Forgot your password? Reset it.</small>
+              </a>
+            </label>
+
+            <input id="password" type="password" class="form-control" name="password" placeholder="Enter your password..." required autocomplete="password">
+            @if(flashMessages.has('errors.password'))
+              <span class="text-cyan">
+                {{ flashMessages.get('errors.password') }}
+              </span>
+            @endif
+          </div>
+
+          <div class="mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="remember" id="remember">
+
+              <label class="form-check-label">
+                Remember my credentials
+              </label>
+            </div>
+
+            @if(flashMessages.has('errors.remember'))
+              <span class="text-cyan">
+                {{ flashMessages.get('errors.remember') }}
+              </span>
+            @endif
+          </div>
+
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-outline-cyan btn-block">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+@endsection

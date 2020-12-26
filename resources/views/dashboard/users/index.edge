@@ -1,0 +1,168 @@
+@layout('layout/app')
+
+@section('content')
+<div class="min-vh-100 d-flex align-items-center my-5">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 col-lg-6">
+        <h5 class="text-fogra">Add a new users</h5>
+        <p class="text-black">Here you can add a new user to the platform according your details.</p>
+      </div>
+      <div class="col-md-12 col-lg-6">
+        @if(flashMessages.has('error'))
+        <div class="alert alert-orange alert-dismissible" role="alert">
+          {{ flashMessages.get('error') }}
+          <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+        @if(flashMessages.has('success'))
+        <div class="alert alert-cyan alert-dismissible" role="alert">
+          {{ flashMessages.get('success') }}
+          <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+        <div class="card shadow-lg">
+          <form method="POST" action="{{ route('users.store') }}">
+            <div class="card-body">
+              {{ csrfField() }}
+              <div class="mb-3">
+                <label for="name" class="form-label">Full name of the user <strong class="text-orange">*</strong></label>
+                <input id="name" type="text" class="form-control" name="name" placeholder="Enter the user's full name..." required />
+
+                @if (flashMessages.has('errors.name'))
+                <span class="text-cyan">
+                  {{ flashMessages.get('errors.name') }}
+                </span>
+                @endif
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email address of the user <strong class="text-orange">*</strong></label>
+                <input id="email" type="text" class="form-control" name="email" placeholder="Enter the user's email address..." />
+
+                @if (flashMessages.has('errors.email'))
+                <span class="text-cyan">
+                  {{ flashMessages.get('errors.email') }}
+                </span>
+                @endif
+              </div>
+              <div class="row">
+                <div class="col-md-12 col-lg-6">
+                  <div class="mb-3">
+                    <label for="username" class="form-label">Username of the account <strong class="text-orange">*</strong></label>
+                    <input id="username" type="text" class="form-control" name="username" placeholder="Enter the username..." />
+
+                    @if (flashMessages.has('errors.username'))
+                    <span class="text-cyan">
+                      {{ flashMessages.get('errors.username') }}
+                    </span>
+                    @endif
+                  </div>
+                </div>
+                <div class="col-md-12 col-lg-6">
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Password of the account <strong class="text-orange">*</strong></label>
+                    <input id="password" type="text" class="form-control" name="password" placeholder="Enter the password..." />
+
+                    @if (flashMessages.has('errors.password'))
+                    <span class="text-cyan">
+                      {{ flashMessages.get('errors.password') }}
+                    </span>
+                    @endif
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6 col-md-12">
+                  <div class="mb-3">
+                    <label for="email_parent" class="form-label">E-mail of the user's parents</label>
+                    <input id="email_parent" type="text" class="form-control" name="email_parent" placeholder="Enter the parent's e-mail (optional)..." />
+
+                    @if (flashMessages.has('errors.email_parent'))
+                    <span class="text-cyan">
+                      {{ flashMessages.get('errors.email_parent') }}
+                    </span>
+                    @endif
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                  <div class="mb-3">
+                    <label for="phone" class="form-label">Phone number of the user's parents <strong class="text-orange">*</strong></label>
+                    <input id="phone" type="text" class="form-control" name="phone" placeholder="Enter the phone number..." required />
+
+                    @if (flashMessages.has('errors.phone'))
+                    <span class="text-cyan">
+                      {{ flashMessages.get('errors.phone') }}
+                    </span>
+                    @endif
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-footer">
+              <button type="submit" class="btn btn-cyan">Add</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <hr class="my-5" />
+
+    <div class="row">
+      <div class="col-md-12 col-lg-6">
+        <h5 class="text-fogra">See the list of schools</h5>
+        <p class="text-black">Here you can see a list of the schools integrated in the platform.</p>
+
+        <div class="text-center my-1">
+          @if(flashMessages.has('errormsg'))
+          <div class="alert alert-orange alert-dismissible" role="alert">
+            {{ flashMessages.get('errormsg') }}
+            <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+          </div>
+          @endif
+          @if(flashMessages.has('message'))
+          <div class="alert alert-cyan alert-dismissible" role="alert">
+            {{ flashMessages.get('message') }}
+            <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+          </div>
+          @endif
+        </div>
+      </div>
+
+      <div class="col-md-12 col-lg-6">
+        @each(user in users.rows)
+        <div class="card shadow-lg my-1">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div class="text-orange">
+              {{ user.username }}
+              <br/>
+              <small class="text-muted">{{ user.email }}</small>
+            </div>
+            <div>
+              <form action="{{ `/users/${user.id}?_method=DELETE` }}" method="POST" class="d-inline-flex mx-1">
+                {{ csrfField() }}
+
+                <button type="submit" class="btn btn-cyan">Delete</button>
+              </form>
+              <a class="text-fogra text-decoration-none mx-1" href="{{ route('users.show', { params: { id: user.id }}) }}">
+                Edit <i class="fas fa-edit"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        @endeach
+        @if (users.lastPage != 1)
+        <div class="text-center">
+          @each(anchor in users.getUrlsForRange(1, users.lastPage))
+          <a class="btn btn-outline-cyan mx-1" href="{{ anchor.url }}">
+            {{ anchor.page }}
+          </a>
+          @endeach
+        </div>
+        @endif
+      </div>
+    </div>
+  </div>
+</div>
+@endsection

@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-black">
+  <div class="container">
+    <a class="navbar-brand text-orange" href="{{ route('welcome') }}">Webish <i class="fas fa-cogs"></i></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+        @unless(auth.user)
+        <li class="nav-item mr-lg-1 mb-lg-0 mb-2">
+          <a class="nav-link btn btn-outline-orange" href="{{ route('auth.show.login') }}">Login</a>
+        </li>
+        <li class="nav-item ml-lg-1 mt-lg-0 mt-2">
+          <a class="nav-link btn btn-orange">Registrations</a>
+        </li>
+        @else
+        <li class="nav-item mr-lg-1 mb-lg-0 mb-2">
+          <a class="nav-link">{{ auth.user.username }} <small class="text-muted">{{ auth.user.name }}</small></a>
+        </li>
+        <li class="nav-item ml-lg-1 mt-lg-0 mt-2">
+          <a class="nav-link btn btn-orange" href="{{ route('auth.logout') }}">Logout</a>
+        </li>
+        @endunless
+      </ul>
+    </div>
+  </div>
+</nav>
+
+@if(flashMessages.has('attempt.error'))
+<div class="w-100 alert-orange alert-dismissible fade show" role="alert">
+  <div class="container-fluid text-center">
+    {{ flashMessages.get('attempt.error') }}
+  </div>
+</div>
+@endif
+
+@if(flashMessages.has('guest.error'))
+<div class="w-100 alert-orange alert-dismissible fade show" role="alert">
+  <div class="container-fluid text-center">
+    {{ flashMessages.get('guest.error') }}
+  </div>
+</div>
+@endif

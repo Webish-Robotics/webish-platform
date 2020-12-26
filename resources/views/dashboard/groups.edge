@@ -1,0 +1,124 @@
+@layout('layout/app')
+
+@section('content')
+<div class="min-vh-100 d-flex flex-column align-items-between my-5">
+  <div class="container">
+    @if(flashMessages.has('error'))
+    <div class="alert alert-orange alert-dismissible my-2" role="alert">
+      {{ flashMessages.get('error') }}
+      <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+    @if(flashMessages.has('success'))
+    <div class="alert alert-cyan alert-dismissible my-2" role="alert">
+      {{ flashMessages.get('success') }}
+      <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+    <h5 class="text-fogra">Edit the group for {{ team.name }}</h5>
+    <p class="text-black">Here you can edit the group.</p>
+    <div class="card shadow-lg">
+      <form method="POST" action="{{ `/groups/${team.id}?_method=PATCH` }}">
+        <div class="card-body">
+          {{ csrfField() }}
+          <div class="mb-3">
+            <label for="group_name" class="form-label">Name of the group <strong class="text-orange">*</strong></label>
+            <input id="group_name" type="text" class="form-control" name="group_name" placeholder="Enter the group name..." required />
+
+            @if (flashMessages.has('errors.group_name'))
+              <span class="text-cyan">
+                {{ flashMessages.get('errors.group_name') }}
+              </span>
+            @endif
+          </div>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-cyan">Edit</button>
+        </div>
+      </form>
+    </div>
+
+    <hr class="my-3" />
+
+    <h5 class="text-fogra">Manage your members</h5>
+    <p class="text-black">Here you can add a new members and mentors.</p>
+    @if(flashMessages.has('error_add'))
+    <div class="alert alert-orange alert-dismissible my-2" role="alert">
+      {{ flashMessages.get('error_add') }}
+      <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+    @if(flashMessages.has('success_add'))
+    <div class="alert alert-cyan alert-dismissible my-2" role="alert">
+      {{ flashMessages.get('success_add') }}
+      <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+    <div class="card shadow-lg">
+      <form method="POST" action="{{ `/add/group/${team.id}` }}">
+        <div class="card-body">
+          {{ csrfField() }}
+          <div class="mb-3">
+            <label for="username" class="form-label">Username of the member to be added <strong class="text-orange">*</strong></label>
+            <input id="username" type="text" class="form-control" name="username" placeholder="Enter the user's name..." required />
+
+            @if (flashMessages.has('errors.username'))
+            <span class="text-cyan">
+                {{ flashMessages.get('errors.username') }}
+              </span>
+            @endif
+          </div>
+
+          <div class="mb-3">
+            <label for="role" class="form-label">Select the role of the member in this group <strong class="text-orange">*</strong></label>
+            <select class="form-select" name="role">
+              <option value="1">Student</option>
+              <option value="2">Trainer</option>
+            </select>
+
+            @if (flashMessages.has('errors.role'))
+            <span class="text-cyan">
+                {{ flashMessages.get('errors.role') }}
+              </span>
+            @endif
+          </div>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-cyan">Add</button>
+        </div>
+      </form>
+    </div>
+
+    <hr class="my-3" />
+
+    <h5 class="text-fogra">Edit your members</h5>
+    <p class="text-black">Here you can edit your members and mentors.</p>
+
+    @each(user in groups_users[0].users)
+    <div class="card shadow-lg my-1">
+      <div class="card-body d-flex justify-content-between align-items-center">
+        <div class="text-orange">
+          {{ user.name }} <small class="text-muted">{{ user.username }}</small>
+          <br/>
+          <strong class="text-cyan">{{ user.role === 1 ? `Student` : `Trainer` }}</strong>
+        </div>
+        <div class="d-inline-flex">
+          <form action="{{ `/delete/${user.id}/group/${team.id}?_method=DELETE` }}" method="POST" class="d-inline-flex mx-1">
+            {{ csrfField() }}
+
+            <button type="submit" class="btn btn-cyan">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    @else
+    <p class="text-center">
+      <strong class="text-orange">Whooops!!!</strong>
+      No entry was found. <i class="fas fa-user-graduate text-snow"></i>
+    </p>
+    @endeach
+
+  </div>
+</div>
+@endsection
