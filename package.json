@@ -12,6 +12,7 @@
     "@babel/preset-react": "^7.12.7",
     "@fortawesome/fontawesome-free": "^5.15.1",
     "@monaco-editor/react": "^3.7.1",
+    "@types/socket.io": "^2.1.12",
     "adonis-mix-asset": "^2.0.0",
     "adonis-preset-ts": "^1.1.0",
     "axios": "^0.21.0",
@@ -27,6 +28,7 @@
     "sass": "^1.29.0",
     "sass-loader": "^8.0.2",
     "slug": "^4.0.2",
+    "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.1",
     "typescript": "^4.1.2",
     "youch": "^2.1.1",
@@ -49,8 +51,6 @@
     "phc-argon2": "^1.0.11",
     "proxy-addr": "^2.0.6",
     "reflect-metadata": "^0.1.13",
-    "remove": "^0.1.5",
-    "save-dev": "0.0.1-security",
     "source-map-support": "^0.5.19"
   }
 }

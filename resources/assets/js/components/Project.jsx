@@ -17,6 +17,7 @@ import io from 'socket.io-client'
 
 const { useState } = React
 const WEBSOCKET_SERVER = 'ws://localhost:8080/'
+const socket = io(WEBSOCKET_SERVER, {transports: ['websocket']})
 
 /**
  * This is the main Project JSX Functional Component
@@ -30,15 +31,18 @@ export default function Project({ ...props }) {
   const user = JSON.parse(props.user)
   const team = JSON.parse(props.team)
 
+  // HANDLE THE SOCKET CONNECTION
+  socket.on('connect', () => {
+    socket.emit('/joinable', `${team.name}\nSTUDENT`)
+  })
+
+
   // STATES & REFERENCES
   const [saveButton, setSaveButton] = useState(false)
   const [executeButton, setExecuteButton] = useState(true)
   const [code, setCode] = useState(JSON.parse(project.details).code)
-  const [socket, setSocket] = useState({
-    handler: io(WEBSOCKET_SERVER, {transports: ['websocket']}),
-    room: team.name
-  })
   const [theme, setTheme] = useState('dark')
+  const [alert, setAlert] = useState(false)
 
   // HOTKEY TO SAVE THE PROJECT WHEN CONTROL + S (MacOS) OR CTRL + S (Windows) IS PRESSED
   // BASED ON THE DEPS WE CAN SEEK IF THE code IS CHANGED
@@ -47,24 +51,42 @@ export default function Project({ ...props }) {
     enableOnTags: ['INPUT', 'TEXTAREA', 'SELECT']
   }, [code])
 
+  // THE FEEDBACK BASED SYSTEM
+  socket.on('/results', function (data) {
+    if (user.username === data.username) {
+      setAlert(!data.code ? "The code was executed with success, congrats 😁👏" : `The code was not executed, error details: ${data.message}`)
+    }
+  })
+
   // FUNCTIONS
   const handleExecuteButton = () => {
     handleSaveButton()
-    socket.handler.emit('/execution', {
+    socket.emit('/execution', {
       code: code,
-      user: user.id,
-      room: socket.room,
+      user: user.username,
+      room: `${team.name}\n`,
     })
     setExecuteButton(false)
   }
   const handleEditorCode = (ev, value) => {setSaveButton(true); setCode(value)}
   const handleSaveButton = async () => await axios
       .patch(`/dashboard/${project.id}`, {code: code}).then(() => setSaveButton(false))
-
   const handleThemeButton = () => theme === 'dark' ? setTheme('white') : setTheme('dark')
 
   return (
     <>
+      {
+        alert &&
+        <div className="w-100 bg-orange text-center menu-height d-flex align-items-center">
+          <div className="container-fluid">
+            {alert}
+
+            <button className="btn-sm btn-fogra text-snow mx-2" onClick={() => setAlert(false)}>
+              <i className="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      }
       <div className={`w-100 ${theme !== 'dark' ? 'bg-snow' : 'bg-fogra'} menu-height d-flex align-items-center justify-content-center`}>
         <div className="text-center">
         {

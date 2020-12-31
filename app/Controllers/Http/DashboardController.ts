@@ -63,6 +63,7 @@ export default class DashboardController {
   public async update({ request, response, params }: HttpContextContract) {
     const data = request.only(['code'])
     const project = await Project.findOrFail(params.id)
+
     try {
       project.details = {code: data.code}
       await project.save()
@@ -81,6 +82,7 @@ export default class DashboardController {
    */
   public async destroy({ params, session, response }: HttpContextContract) {
     const project = await Project.findOrFail(params.id)
+
     try {
       await project.delete()
     } catch (error) {
